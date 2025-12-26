@@ -1,0 +1,37 @@
+version = 1
+revision = 3
+requires-python = ">=3.11"
+
+[manifest]
+members = [
+    "ch04-horse-racing",
+    "ch07-nanobanana",
+    "ch08-ai-board",
+    "ch09-shorts-factory",
+    "yozm-vibe-antigravity",
+]
+
+[[package]]
+name = "ch04-horse-racing"
+version = "0.1.0"
+source = { editable = "projects/ch04-horse-racing" }
+
+[[package]]
+name = "ch07-nanobanana"
+version = "0.1.0"
+source = { editable = "projects/ch07-nanobanana" }
+
+[[package]]
+name = "ch08-ai-board"
+version = "0.1.0"
+source = { editable = "projects/ch08-ai-board" }
+
+[[package]]
+name = "ch09-shorts-factory"
+version = "0.1.0"
+source = { editable = "projects/ch09-shorts-factory" }
+
+[[package]]
+name = "yozm-vibe-antigravity"
+version = "0.1.0"
+source = { virtual = "." }
