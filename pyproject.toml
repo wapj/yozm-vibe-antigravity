@@ -1,0 +1,17 @@
+[project]
+name = "yozm-vibe-antigravity"
+version = "0.1.0"
+description = "[요즘 바이브 코딩] 안티그래비티 진짜 에이전트 프로젝트 - 예제 코드"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Andy" }
+]
+
+[tool.uv.workspace]
+members = [
+    "projects/ch04-horse-racing",
+    "projects/ch07-nanobanana",
+    "projects/ch08-ai-board",
+    "projects/ch09-shorts-factory",
+]
