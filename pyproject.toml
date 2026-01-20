@@ -7,6 +7,10 @@ requires-python = ">=3.11"
 authors = [
     { name = "Andy" }
 ]
+dependencies = [
+    "rich>=14.2.0",
+    "typer>=0.21.1",
+]
 
 [tool.uv.workspace]
 members = [
