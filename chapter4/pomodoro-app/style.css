@@ -41,13 +41,46 @@ header {
     margin-bottom: 2rem;
 }
 
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    animation: float 3s ease-in-out infinite;
+}
+
 h1 {
     font-size: 1.5rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin: 0;
     letter-spacing: 1px;
     color: var(--text-secondary);
     text-transform: uppercase;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-5px) rotate(5deg);
+    }
+
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
 }
 
 .mode-indicator {
@@ -202,4 +235,74 @@ body.rest-mode {
 
 body.rest-mode .mode-indicator {
     background-color: rgba(3, 218, 198, 0.1);
+}
+
+/* History Section */
+.history-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+}
+
+body.light-mode .history-section {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.history-header h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.history-list-container {
+    max-height: 150px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+body.light-mode .history-list-container {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+#history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#history-list li {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-primary);
+}
+
+body.light-mode #history-list li {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+#history-list li:last-child {
+    border-bottom: none;
+}
+
+.history-time {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.btn.small {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
 }

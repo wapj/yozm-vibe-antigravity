@@ -24,9 +24,15 @@ class PomodoroTimer {
         this.themeToggleBtn = document.getElementById('theme-toggle');
         this.themeIcon = this.themeToggleBtn.querySelector('.icon');
 
+        this.historyList = document.getElementById('history-list');
+        this.exportBtn = document.getElementById('export-history-btn');
+        this.history = [];
+
         this.initializeEventListeners();
         this.initializeTheme();
+        this.loadHistory();
         this.updateDisplay();
+        this.renderHistory();
     }
 
     initializeEventListeners() {
@@ -34,6 +40,7 @@ class PomodoroTimer {
         this.pauseBtn.addEventListener('click', () => this.pauseTimer());
         this.resetBtn.addEventListener('click', () => this.resetTimer());
         this.themeToggleBtn.addEventListener('click', () => this.toggleTheme());
+        this.exportBtn.addEventListener('click', () => this.exportHistory());
     }
 
     initializeTheme() {
@@ -106,6 +113,7 @@ class PomodoroTimer {
         this.pauseTimer();
 
         if (this.isWorkSession) {
+            this.addHistoryEntry('집중', this.WORK_TIME);
             this.completedSessions++;
             this.sessionCountDisplay.textContent = this.completedSessions;
 
@@ -115,6 +123,13 @@ class PomodoroTimer {
                 this.startShortBreak();
             }
         } else {
+            const duration = (this.completedSessions % this.SESSIONS_BEFORE_LONG_BREAK === 0)
+                ? this.LONG_BREAK
+                : this.SHORT_BREAK;
+            const type = (this.completedSessions % this.SESSIONS_BEFORE_LONG_BREAK === 0)
+                ? '긴 휴식'
+                : '짧은 휴식';
+            this.addHistoryEntry(type, duration);
             this.startWork();
         }
     }
@@ -159,6 +174,93 @@ class PomodoroTimer {
             body.classList.add('rest-mode');
             this.modeIndicator.textContent = this.timeLeft === this.LONG_BREAK ? "Long Break" : "Short Break";
         }
+    }
+
+    loadHistory() {
+        try {
+            this.history = JSON.parse(localStorage.getItem('pomodoro-history')) || [];
+        } catch (e) {
+            this.history = [];
+        }
+    }
+
+    saveHistory() {
+        localStorage.setItem('pomodoro-history', JSON.stringify(this.history));
+    }
+
+    addHistoryEntry(type, duration) {
+        const entry = {
+            id: Date.now(),
+            date: new Date().toISOString(),
+            type: type,
+            duration: duration
+        };
+        this.history.unshift(entry);
+        this.saveHistory();
+        this.renderHistory();
+    }
+
+    renderHistory() {
+        this.historyList.innerHTML = '';
+        this.history.forEach(entry => {
+            const li = document.createElement('li');
+            const date = new Date(entry.date);
+            const dateStr = `${date.getMonth() + 1}/${date.getDate()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            const durationMin = Math.floor(entry.duration / 60);
+
+            li.innerHTML = `
+                <div>
+                    <strong>${entry.type}</strong>
+                    <span class="history-time"> - ${dateStr}</span>
+                </div>
+                <span>${durationMin}분</span>
+            `;
+            this.historyList.appendChild(li);
+        });
+    }
+
+    exportHistory() {
+        if (this.history.length === 0) {
+            alert('내보낼 히스토리가 없습니다.');
+            return;
+        }
+
+        const escapeCsv = (str) => {
+            if (str === null || str === undefined) return '';
+            const stringValue = String(str);
+            if (stringValue.includes(',') || stringValue.includes('"') || stringValue.includes('\n')) {
+                return `"${stringValue.replace(/"/g, '""')}"`;
+            }
+            return stringValue;
+        };
+
+        const BOM = '\uFEFF';
+        const csvHeader = ['Date', 'Type', 'Duration (Seconds)', 'Duration (Minutes)'];
+
+        const rows = this.history.map(e => {
+            const date = new Date(e.date).toLocaleString();
+            return [
+                date,
+                e.type,
+                e.duration,
+                (e.duration / 60).toFixed(1)
+            ];
+        });
+
+        const csvContent = BOM + [
+            csvHeader.map(escapeCsv).join(','),
+            ...rows.map(row => row.map(escapeCsv).join(','))
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'pomodoro_history.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 }
 

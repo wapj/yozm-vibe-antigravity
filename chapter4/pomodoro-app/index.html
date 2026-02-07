@@ -15,7 +15,10 @@
     <div class="container">
         <header>
             <div class="header-content">
-                <h1>Pomodoro</h1>
+                <div class="brand">
+                    <img src="logo.svg" alt="Pomodoro Tomato" class="logo">
+                    <h1>Pomodoro</h1>
+                </div>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
                     <span class="icon">☀️</span>
                 </button>
@@ -43,6 +46,18 @@
             </div>
             <p id="status-message" class="status-message">집중할 시간입니다!</p>
         </footer>
+
+        <section class="history-section">
+            <div class="history-header">
+                <h2>세션 히스토리</h2>
+                <button id="export-history-btn" class="btn secondary small">CSV 내보내기</button>
+            </div>
+            <div class="history-list-container">
+                <ul id="history-list">
+                    <!-- History items will be populated here -->
+                </ul>
+            </div>
+        </section>
     </div>
     <script src="script.js"></script>
 </body>
